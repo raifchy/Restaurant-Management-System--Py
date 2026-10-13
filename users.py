@@ -7,5 +7,10 @@ class User(ABC):
         self.email = email
         self.address = address
 
+class Employee(User):
+    def __init__(self, name, phone, email, address, designation, age, salary):
+        super().__init__(name, phone, email, address)
+        self.designation = designation
+        self.age = age
+        self.salary = salary
 
-        
