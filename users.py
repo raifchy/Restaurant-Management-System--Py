@@ -7,6 +7,43 @@ class User(ABC):
         self.email = email
         self.address = address
 
+class Customer(User):
+    def __init__(self, name, phone, email, address):
+        super().__init__(name, phone, email, address)
+        self.cart = []
+
+    def view_menu(self, restaurant):
+        restaurant.menu.show_menu()
+    def add_to_cart(self, restaurant, item_name):
+        item = restaurant.menu.find_item(item_name)
+        if item:
+            self.cart.append(item)
+        else:
+            print(item_name + "not found")
+
+class Order:
+    def __init__(self):
+        self.items = {}
+
+    def add_item(self, item, quantity):
+        if item in self.items:
+            self.items[ item ] += quantity
+        else:
+            self.items[ item ] = quantity
+
+    def remove_item(self, item):
+        if item in self.items:
+            del self.items[item]
+        else:
+            print(item + "not found!")
+
+    def total_price(self):
+        return sum( item.price * quantity for item, quantity in self.items.items() )
+
+    def clear(self):
+        self.items = {}
+
+
 
 class Employee(User):
     def __init__(self, name, phone, email, address, designation, age, salary):
@@ -33,8 +70,8 @@ class Admin(User):
     def remove_menu_item(self, restaurant, item):
         restaurant.menu.remove_menu_item(item)
 
-    def show_menu_item(self, restaurant):
-        restaurant.menu.show_menu_items()
+    def show_menu(self, restaurant):
+        restaurant.menu.show_menu()
 
 
 class Restaurant:
@@ -72,7 +109,7 @@ class Menu:
         else:
             print(f"{item_name} not found")
 
-    def show_menu_items(self):
+    def show_menu(self):
         print("-----Menu-----")
         print(f"Name\tPrice\tQuantity")
         for item in self.items:
@@ -82,6 +119,5 @@ class Menu:
 class FootItem:
     def __init__(self, name, price, quantity):
         self.name = name
-        self.name = price
+        self.price = price
         self.quantity = quantity
-
